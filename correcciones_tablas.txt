@@ -1,0 +1,18 @@
+_________________________________
+`raw_material_inventory`
+-num_vl
+-cantidad
+-providerId
+
+_________________________________
+`raw_materials`
+-status
+
+_________________________________
+crear `package_inventory`
+-id
+-packingId
+-provider_id
+-num_pedido
+-cantidad
+________________________________
