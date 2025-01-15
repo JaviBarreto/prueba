@@ -68,7 +68,8 @@ class UserController extends Controller
                 response()->json([
                     'success' => true,
                     'message' => 'Record information retrieved successfully.',
-                    'data' => new UserResource($data)
+                    'data' => $data
+                    // 'data' => new UserResource($data)
                 ], 200) :
                 response()->json([
                     'success' => false,
@@ -100,7 +101,8 @@ class UserController extends Controller
                 response()->json([
                     'success' => true,
                     'message' => 'Record information retrieved successfully.',
-                    'data' => UserResource::collection($data)
+                    'data' => $data
+                    // 'data' => UserResource::collection($data)
                 ], 200) :
                 response()->json([
                     'success' => false,
@@ -199,7 +201,17 @@ class UserController extends Controller
         //retornar la ip y el dispositivo, si es pc o movil de la tabla de sesiones y de personal access tokens para que se envie al cliente
         //tanto la ip como la fecha de expiracion del token... habilitar los permisos que va a tener ese usuario relacionados con el campo habilities
         //revisar la tabla de seseions y sus atributos
-        return $user->createToken('token')->plainTextToken;
+        // return $user->createToken('token')->plainTextToken;
+        $token = $user->createToken('token')->plainTextToken;
+
+        return  response()->json([
+                    'success' => true,
+                    'message' => 'Record deleted successfully.',
+                    'data' => [
+                        'user' => $user,
+                        'token' => $token
+                    ]
+                ], 200);
     }   
     
 }

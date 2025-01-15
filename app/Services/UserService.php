@@ -3,17 +3,20 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Models\AuditLog;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Services\Utilities\AuditLogService;
 
 class UserService
 {
     protected $userModel;
 
-    public function __construct(User $userModel)
+    public function __construct(User $userModel, AuditLogService $auditLogService)
     {
         $this->userModel = $userModel;
+        $this->auditLogService = $auditLogService;
     }
 
     public function createUser($data)
@@ -40,6 +43,8 @@ class UserService
         $token = $user->createToken('Token')->plainTextToken;
 
         $this->updateTokenExpiration($user->id);
+
+        $this->auditLogService->storeAuditLog($user->id,'create user');
 
         return [
             // 'user' => $user::with('addresses','contacts')->find($user->id),
@@ -76,6 +81,8 @@ class UserService
 
         $user->save();
 
+        $this->auditLogService->storeAuditLog($id,'update user');
+
         return $user;
     }
 
@@ -87,6 +94,8 @@ class UserService
         }
 
         $user->delete();
+
+        $this->auditLogService->storeAuditLog($id,'delete user');
 
         return $user;
     }

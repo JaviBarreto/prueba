@@ -98,6 +98,7 @@ class UserController extends Controller
 
     public function showUser($id)
     {
+        return 'sdf';
         try {
             $data = $this->userService->showUser($id);
             return $data ?
