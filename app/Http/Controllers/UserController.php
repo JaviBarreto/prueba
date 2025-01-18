@@ -22,11 +22,12 @@ use App\Models\User;
 // use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 // use Illuminate\Support\Facades\Mail;
-// use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\ValidationException;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequests\CreateUserRequest;
 use App\Http\Requests\UserRequests\UpdateUserRequest;
+use App\Http\Requests\UserRequests\LoginUserRequest;
 use App\Services\UserService;
 use App\Services\Utilities\PaginationValidationService;
 use App\Http\Resources\UserResource;
@@ -172,12 +173,9 @@ class UserController extends Controller
     }
 
 
-    public function login(Request $request) {
+    public function login(LoginUserRequest $request) {
 
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+       
     
         $credentials = $request->only('email', 'password');
         
@@ -187,7 +185,7 @@ class UserController extends Controller
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
                 'email' => ['el correo proporcionado es incorrecto'],
-            ]);
+            ])  ;
         }
         // return $user->id;
         // $userSession->id_user = $user->id;
