@@ -161,6 +161,27 @@ class UserController extends Controller
         }
     }
 
+    public function loginUser(LoginUserRequest $request) {
+        
+        try {
+            
+            $data = $this->userService->loginUser($request->validated());
+            // return 'sdf';
+            return $data ?
+                response()->json([
+                    'success' => true,
+                    'message' => 'User logged in successfully.',
+                    'data' => $data
+                ], 200) :
+                response()->json([
+                    'success' => false,
+                    'message' => 'Record not found'
+                ], 404);
+        } catch (Exception $e) {
+            return $this->handleException($e);
+        }
+    }   
+
     private function handleException(Exception $e)
     {
         return response()->json([
@@ -171,45 +192,5 @@ class UserController extends Controller
             ]
         ], 500);
     }
-
-
-    public function login(LoginUserRequest $request) {
-
-       
-    
-        $credentials = $request->only('email', 'password');
-        
-        $user = User::where('email',  $request->email)->first();
-        // $userSession = new UserSession;
-        
-        if (! $user || ! Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['el correo proporcionado es incorrecto'],
-            ])  ;
-        }
-        // return $user->id;
-        // $userSession->id_user = $user->id;
-        // $userSession->ip = $request->getClientIp();
-        // $userSession->save();
-        // crear el registro que va a llevar el control de los inicios de sesion de cada usuario
-        // $user = User::create([
-        //     'id_user' => $request->name,
-        //     'date_sesion' => $request->email,
-        // ]);
-        //retornar la ip y el dispositivo, si es pc o movil de la tabla de sesiones y de personal access tokens para que se envie al cliente
-        //tanto la ip como la fecha de expiracion del token... habilitar los permisos que va a tener ese usuario relacionados con el campo habilities
-        //revisar la tabla de seseions y sus atributos
-        // return $user->createToken('token')->plainTextToken;
-        $token = $user->createToken('token')->plainTextToken;
-
-        return  response()->json([
-                    'success' => true,
-                    'message' => 'Record deleted successfully.',
-                    'data' => [
-                        'user' => $user,
-                        'token' => $token
-                    ]
-                ], 200);
-    }   
     
 }

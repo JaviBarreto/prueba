@@ -318,4 +318,60 @@ public function changePassword(Request $request) {
 public function registerLogin() {
     return "registrando el inicio sesionm";
 }
+
+public function logidn(LoginUserRequest $request) {
+
+       
+    
+    $credentials = $request->only('email', 'password');
+    
+    $user = User::with(['userType'])->where('email',  $request->email)->first();
+    // $userSession = new UserSession;
+    
+    if (! $user || ! Hash::check($request->password, $user->password)) {
+        throw ValidationException::withMessages([
+            'email' => ['Incorrect credentials'],
+        ])  ;
+    }
+    // return $user->id;
+    // $userSession->id_user = $user->id;
+    // $userSession->ip = $request->getClientIp();
+    // $userSession->save();
+    // crear el registro que va a llevar el control de los inicios de sesion de cada usuario
+    // $user = User::create([
+    //     'id_user' => $request->name,
+    //     'date_sesion' => $request->email,
+    // ]);
+    //retornar la ip y el dispositivo, si es pc o movil de la tabla de sesiones y de personal access tokens para que se envie al cliente
+    //tanto la ip como la fecha de expiracion del token... habilitar los permisos que va a tener ese usuario relacionados con el campo habilities
+    //revisar la tabla de seseions y sus atributos
+    // return $user->createToken('token')->plainTextToken;
+    $token = $user->createToken('token')->plainTextToken;
+
+    return  response()->json([
+                'success' => true,
+                'message' => 'User logged in successfully.',
+                'data' => [
+                    'user' => $user,
+                    'token' => $token
+                ]
+            ], 200);
+    
+    try {
+        $data = $this->userService->deleteUser($id);
+        return $data ?
+            response()->json([
+                'success' => true,
+                'message' => 'Record deleted successfully.',
+                'data' => $data
+            ], 200) :
+            response()->json([
+                'success' => false,
+                'message' => 'Record not found'
+            ], 404);
+    } catch (Exception $e) {
+        return $this->handleException($e);
+    }
+}   
+
 }

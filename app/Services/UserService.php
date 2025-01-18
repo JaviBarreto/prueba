@@ -112,6 +112,24 @@ class UserService
         return $user;
     }
 
+    public function loginUser(array $data){
+       
+        $user = User::with(['userType'])->where('email', $data['email'])->first();
+        
+        if (! $user || ! Hash::check($data['password'], $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['Incorrect credentials'],
+            ]);
+        }
+
+        $token = $user->createToken('token')->plainTextToken;
+
+        return [
+            'user' => $user,
+            'token' => $token,
+        ];
+    }
+
     protected function updateTokenExpiration($userId)
     {
         $expiresAt = now()->addMinutes(config('sanctum.expiration'));
