@@ -24,13 +24,8 @@ class ModuleUserType extends Model
         'updated_at'
     ];
 
-    public function client()
+    public function modules()
     {
-        return $this->belongsTo(Client::class);
-    }
-
-    public function sales()
-    {
-        return $this->hasMany(Sale::class);
+        return $this->hasMany(Module::class);
     }
 }

@@ -55,12 +55,24 @@ class UserService
 
     public function showUser($id)
     {
-        return User::find($id);
+        return User::with(['userType'])->find($id);
     }
 
     public function listUser($perPage = 10, $page = 1)
     {
-        return User::paginate($perPage, ['*'], 'page', $page);
+        return User::with(['userType'])->paginate($perPage, ['*'], 'page', $page);
+
+
+    //      // Obtener el modelo con las relaciones
+    // $modelo = Modelo::with(['userType', 'auditLogs'])->findOrFail($id);
+
+    // // Acceder a las relaciones
+    // $userType = $modelo->userType;
+    // $auditLogs = $modelo->auditLogs;
+
+    // // Pasar los datos a la vista o procesarlos según necesites
+    // return view('tu.vista', compact('modelo', 'userType', 'auditLogs'));
+
     }
 
 

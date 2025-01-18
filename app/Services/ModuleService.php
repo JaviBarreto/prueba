@@ -33,12 +33,12 @@ class ModuleService
 
     public function showModule($id)
     {
-        return Module::find($id);
+        return Module::with(['modules'])->find($id);
     }
 
     public function listModules($perPage = 10, $page = 1)
     {
-        return Module::paginate($perPage, ['*'], 'page', $page);
+        return Module::with(['modules'])->paginate($perPage, ['*'], 'page', $page);
     }
 
     public function updateModule($data, $id)

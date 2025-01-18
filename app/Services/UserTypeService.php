@@ -29,12 +29,12 @@ class UserTypeService
 
     public function showUserType($id)
     {
-        return UserType::find($id);
+        return UserType::with(['modules'])->find($id);
     }
 
     public function listUserTypes($perPage = 10, $page = 1)
     {
-        return UserType::paginate($perPage, ['*'], 'page', $page);
+        return UserType::with(['modules'])->paginate($perPage, ['*'], 'page', $page);
     }
 
     public function updateUserType($data, $id)
