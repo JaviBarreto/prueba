@@ -51,7 +51,7 @@ Route::get('/listarUsuarios', [UserController::class,'listarUsuarios']);
 Route::put('/updateUser/{id}', [UserController::class,'updateUser']);
 Route::delete('/deleteUser/{id}', [UserController::class, 'deleteUser']);
 
-Route::post('/login', [UserController::class, 'login']);
+Route::post('/loginUser', [UserController::class, 'loginUser']);
 
 Route::get('/users', [UserController::class, 'users']);
 Route::post('/logout',[UserController::class, 'logout']);
