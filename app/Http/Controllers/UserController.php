@@ -28,6 +28,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequests\CreateUserRequest;
 use App\Http\Requests\UserRequests\UpdateUserRequest;
 use App\Http\Requests\UserRequests\LoginUserRequest;
+use App\Http\Requests\UserRequests\ChangePasswordRequest;
 use App\Services\UserService;
 use App\Services\Utilities\PaginationValidationService;
 use App\Http\Resources\UserResource;
@@ -164,9 +165,7 @@ class UserController extends Controller
     public function loginUser(LoginUserRequest $request) {
         
         try {
-            
             $data = $this->userService->loginUser($request->validated());
-            // return 'sdf';
             return $data ?
                 response()->json([
                     'success' => true,
@@ -180,7 +179,26 @@ class UserController extends Controller
         } catch (Exception $e) {
             return $this->handleException($e);
         }
-    }   
+    }
+
+    public function ChangePassword(ChangePasswordRequest $request, $id) {
+        
+        try {
+            $data = $this->userService->ChangePassword($request->validated(), $id);
+            return $data ?
+                response()->json([
+                    'success' => true,
+                    'message' => 'Password changed successfully.',
+                    'data' => $data
+                ], 200) :
+                response()->json([
+                    'success' => false,
+                    'message' => 'Record not found'
+                ], 404);
+        } catch (Exception $e) {
+            return $this->handleException($e);
+        }
+    }  
 
     private function handleException(Exception $e)
     {

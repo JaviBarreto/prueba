@@ -3,9 +3,8 @@
 namespace App\Http\Requests\UserRequests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
-class UpdateUserRequest extends FormRequest
+class ChangePasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,14 +23,10 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules()
     {
-        $userId = $this->route('id');
-
         return [
-            'name' => 'string|max:255',
-            'email' => 'unique:users,email,' . $userId . ',id',
-            'user_type_id' => 'int',
-            // 'email' => 'required|email|max:255|unique:users,email,' . auth()->id(),
-            //email' => 'sometimes|required|email|unique:users,email,' . $this->route('user')
+            'password' => 'required|string|min:8',
+            'newPassword' => 'required|string|min:8|different:password',
+            'newPassword_confirmation' => 'required|string|same:newPassword',
         ];
     }
 
@@ -43,4 +38,3 @@ class UpdateUserRequest extends FormRequest
         ];
     }
 }
-

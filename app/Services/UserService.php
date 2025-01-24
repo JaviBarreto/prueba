@@ -7,7 +7,9 @@ use App\Models\AuditLog;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use App\Services\Utilities\AuditLogService;
+use App\Services\Utilities\PaginationValidationService;
 
 class UserService
 {
@@ -87,13 +89,19 @@ class UserService
             $user->name = $data['name'];
         }
 
-        if (isset($data['password']) && $data['password'] !== '') {
-            $user->password = Hash::make($data['password']);
+        if (isset($data['email']) && $data['email'] !== '') {
+            $user->email = $data['email'];
+        }
+
+        if (isset($data['user_type_id']) && $data['user_type_id'] !== '') {
+            $user->user_type_id = $data['user_type_id'];
         }
 
         $user->save();
 
         $this->auditLogService->storeAuditLog($id,'update user');
+
+        $user->load('userType');
 
         return $user;
     }
@@ -118,7 +126,7 @@ class UserService
         
         if (! $user || ! Hash::check($data['password'], $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['Incorrect credentials'],
+                'email' => ['incorrect credentials'],
             ]);
         }
 
@@ -128,6 +136,29 @@ class UserService
             'user' => $user,
             'token' => $token,
         ];
+    }
+
+    public function ChangePassword($data, $id)
+    {
+        $user = User::find($id);
+        if (!$user) {
+            return null;
+        }
+
+        if (!Hash::check($data['password'], $user->password)) {
+            throw ValidationException::withMessages([
+                'password' => ['incorrect password'],
+            ]);
+        }
+
+        $user->password = Hash::make($data['newPassword']);
+        $user->save();
+
+        $this->auditLogService->storeAuditLog($id,'change password');
+
+        $user->load('userType');
+
+        return $user;
     }
 
     protected function updateTokenExpiration($userId)

@@ -57,6 +57,22 @@ class ModuleService
             $module->route = $data['route'];
         }
 
+        if (isset($data['icon']) && $data['icon'] !== '') {
+            $module->icon = $data['icon'];
+        }
+
+        if (isset($data['status']) && $data['status'] !== '') {
+            $module->status = $data['status'];
+        }
+
+        if (isset($data['department']) && $data['department'] !== '') {
+            $module->department = $data['department'];
+        }
+
+        if (isset($data['position']) && $data['position'] !== '') {
+            $module->position = $data['position'];
+        }
+
         $module->save();
 
         return $module;

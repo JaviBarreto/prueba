@@ -56,7 +56,7 @@ Route::post('/loginUser', [UserController::class, 'loginUser']);
 Route::get('/users', [UserController::class, 'users']);
 Route::post('/logout',[UserController::class, 'logout']);
 Route::post('/forgotPassword',[UserController::class, 'forgotPassword']);
-Route::post('/changePassword',[UserController::class, 'changePassword']);
+Route::put('/changePassword/{id}',[UserController::class, 'changePassword']);
 /*********************************  END USER  **********************************************************************************/
 
 /*********************************  INIT MODULE  *******************************************************************************/
