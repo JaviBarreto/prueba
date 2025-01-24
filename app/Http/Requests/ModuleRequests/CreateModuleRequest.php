@@ -23,11 +23,11 @@ class CreateModuleRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            // 'route' => 'required|string|max:255',
-            // 'icon' => 'required|string|max:255',
-            // 'status' => 'required|int',
-            // 'department' => 'required|string|max:255',
-            // 'position' => 'required|int',
+            'route' => 'required|string|max:255',
+            'icon' => 'required|string|max:255',
+            'status' => 'required|int',
+            'department' => 'required|string|max:255',
+            'position' => 'required|int',
         ];
     }
 }

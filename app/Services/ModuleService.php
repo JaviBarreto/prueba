@@ -43,6 +43,7 @@ class ModuleService
 
     public function updateModule($data, $id)
     {
+
         $module = Module::find($id);
 
         if (!$module) {
